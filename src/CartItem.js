@@ -1,31 +1,6 @@
 import React from "react";
 
 class CartItem extends React.Component {
-  
-
-  //using arrow function to bind the constructor to this function
-  increaseQuantity = () => {
-    // setState form 1(used when not dependent on previous form)
-    // this.setState({
-    //     qty: this.state.qty + 1
-    // });
-
-    // setState form 2(used when dependent on previous form)
-    this.setState((prevState) => {
-      return {
-        qty: prevState.qty + 1,
-      };
-    });
-  };
-  decreaseQuantity = () => {
-    this.setState((prevState) => {
-      if(prevState.qty > 1){
-        return {
-          qty: prevState.qty - 1,
-        };
-      }
-    });
-  };
   render() {
     const { price, title, qty } = this.props.product;
     return (
@@ -41,13 +16,13 @@ class CartItem extends React.Component {
             {/* Buttons */}
             <img
               alt="add-item"
-              onClick={this.increaseQuantity}
+              onClick={() => this.props.onIncreaseQuantity(this.props.product)}
               className="action-icons"
               src="https://cdn-icons-png.flaticon.com/512/992/992651.png"
             />
             <img
               alt="remove-item"
-              onClick={this.decreaseQuantity}
+              onClick={() => this.props.onDecreaseQuantity(this.props.product)}
               className="action-icons"
               src="https://cdn-icons-png.flaticon.com/512/1828/1828906.png"
             />
