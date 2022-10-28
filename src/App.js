@@ -7,9 +7,27 @@ class App extends React.Component {
     super();
     this.state = {
       products: [
-        { price: 65000, title: "SmartPhone", qty: 5, img: "", id: 1 },
-        { price: 5000, title: "Watch", qty: 3, img: "", id: 2 },
-        { price: 89999, title: "Ipad", qty: 1, img: "", id: 3 },
+        {
+          price: 65000,
+          title: "SmartPhone",
+          qty: 5,
+          img: "https://images.unsplash.com/photo-1512054502232-10a0a035d672?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8aXBob25lfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60",
+          id: 1,
+        },
+        {
+          price: 5000,
+          title: "Watch",
+          qty: 3,
+          img: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2F0Y2h8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+          id: 2,
+        },
+        {
+          price: 89999,
+          title: "Ipad",
+          qty: 1,
+          img: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8aXBhZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60",
+          id: 3,
+        },
       ],
     };
   }
@@ -58,6 +76,17 @@ class App extends React.Component {
     return count;
   };
 
+  getCartTotal = () => {
+    const { products } = this.state;
+    let cartTotal = 0;
+
+    products.map((product) => {
+      cartTotal = cartTotal + product.qty * product.price;
+    });
+
+    return cartTotal;
+  };
+
   render() {
     const { products } = this.state;
     return (
@@ -69,6 +98,9 @@ class App extends React.Component {
           onDecreaseQuantity={this.handleDecreaseQuantity}
           onDeleteProduct={this.handleDeleteProduct}
         />
+        <div style={{ padding: 10, fontSize: 20 }}>
+          Your Cart Total is: {this.getCartTotal()}
+        </div>
       </div>
     );
   }
