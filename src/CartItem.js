@@ -9,9 +9,25 @@ class CartItem extends React.Component {
       qty: 1,
       img: "",
     };
+    //this.increaseQuantity = this.increaseQuantity.bind(this)
   }
+
+  //using arrow function to bind the constructor to this function
+  increaseQuantity = () => {
+    // setState form 1(used when not dependent on previous form)
+    // this.setState({
+    //     qty: this.state.qty + 1
+    // });
+
+    // setState form 2(used when dependent on previous form)
+    this.setState((prevState) => {
+      return {
+        qty: prevState.qty + 1,
+      };
+    });
+  };
   render() {
-    const {price, title, qty } = this.state;
+    const { price, title, qty } = this.state;
     return (
       <div className="cart-item">
         <div className="left-block">
@@ -25,6 +41,7 @@ class CartItem extends React.Component {
             {/* Buttons */}
             <img
               alt="add-item"
+              onClick={this.increaseQuantity}
               className="action-icons"
               src="https://cdn-icons-png.flaticon.com/512/992/992651.png"
             />
