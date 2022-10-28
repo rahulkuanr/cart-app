@@ -3,6 +3,7 @@ import React from "react";
 class CartItem extends React.Component {
   render() {
     const { price, title, qty } = this.props.product;
+    const { product, onIncreaseQuantity, onDecreaseQuantity } = this.props;
     return (
       <div className="cart-item">
         <div className="left-block">
@@ -16,13 +17,13 @@ class CartItem extends React.Component {
             {/* Buttons */}
             <img
               alt="add-item"
-              onClick={() => this.props.onIncreaseQuantity(this.props.product)}
+              onClick={() => onIncreaseQuantity(product)}
               className="action-icons"
               src="https://cdn-icons-png.flaticon.com/512/992/992651.png"
             />
             <img
               alt="remove-item"
-              onClick={() => this.props.onDecreaseQuantity(this.props.product)}
+              onClick={() => onDecreaseQuantity(product)}
               className="action-icons"
               src="https://cdn-icons-png.flaticon.com/512/1828/1828906.png"
             />
