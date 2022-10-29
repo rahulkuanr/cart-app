@@ -1,36 +1,55 @@
 import React from "react";
 import Cart from "./Cart";
 import Navbar from "./Navbar";
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       products: [],
-      loading: true
+      loading: true,
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
+    // firebase
+    // .firestore()
+    // .collection('products')
+    // .get()
+    // .then((snapshot) => {
+
+    //   const products = snapshot.docs.map((doc) => {
+    //     const data = doc.data();
+
+    //     data['id'] = doc.id;
+    //     return data;
+    //   })
+
+    //   this.setState({
+    //     products,
+    //     loading: false
+    //   })
+    // })
+
     firebase
-    .firestore()
-    .collection('products')
-    .get()
-    .then((snapshot) => {
+      .firestore()
+      .collection("products")
+      //onSnapshot is an observer that updates the UI whenever the data
+      //in firebase changes
+      .onSnapshot((snapshot) => {
+        const products = snapshot.docs.map((doc) => {
+          const data = doc.data();
 
-      const products = snapshot.docs.map((doc) => {
-        const data = doc.data();
+          data["id"] = doc.id;
+          return data;
+        });
 
-        data['id'] = doc.id;
-        return data;
-      })
-
-      this.setState({
-        products,
-        loading: false
-      })
-    })
+        this.setState({
+          products,
+          loading: false,
+        });
+      });
   }
 
   handleIncreaseQuantity = (product) => {
