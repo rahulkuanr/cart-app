@@ -10,6 +10,8 @@ class App extends React.Component {
       products: [],
       loading: true,
     };
+
+    this.db = firebase.firestore();
   }
 
   componentDidMount() {
@@ -32,8 +34,7 @@ class App extends React.Component {
     //   })
     // })
 
-    firebase
-      .firestore()
+    this.db
       .collection("products")
       //onSnapshot is an observer that updates the UI whenever the data
       //in firebase changes
@@ -56,34 +57,69 @@ class App extends React.Component {
     const { products } = this.state;
     const index = products.indexOf(product);
 
-    products[index].qty += 1;
+    // products[index].qty += 1;
 
-    this.setState({
-      //using shorthand for products: products
-      products,
-    });
+    // this.setState({
+    //   //using shorthand for products: products
+    //   products,
+    // });
+
+    const docRef = this.db.collection("products").doc(products[index].id);
+
+    docRef
+      .update({
+        qty: products[index].qty + 1,
+      })
+      .then(() => {
+        console.log("Increased Successfully");
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
   };
   handleDecreaseQuantity = (product) => {
     const { products } = this.state;
     const index = products.indexOf(product);
     if (products[index].qty > 1) {
-      products[index].qty -= 1;
+      const docRef = this.db.collection("products").doc(products[index].id);
+
+      docRef
+        .update({
+          qty: products[index].qty - 1,
+        })
+        .then(() => {
+          console.log("Decreased Successfully");
+        })
+        .catch((error) => {
+          console.log("Error", error);
+        });
     }
 
-    this.setState({
-      //using shorthand for products: products
-      products,
-    });
+    // this.setState({
+    //   //using shorthand for products: products
+    //   products,
+    // });
   };
   handleDeleteProduct = (id) => {
-    const { products } = this.state;
+    // const { products } = this.state;
 
     //this will return an array which will not match the id
-    const items = products.filter((item) => item.id !== id);
+    // const items = products.filter((item) => item.id !== id);
 
-    this.setState({
-      products: items,
-    });
+    const docRef = this.db.collection("products").doc(id);
+
+    docRef
+      .delete()
+      .then(() => {
+        console.log("Removed Successfully");
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+
+    // this.setState({
+    //   products: items,
+    // });
   };
 
   getCartCount = () => {
@@ -108,11 +144,32 @@ class App extends React.Component {
     return cartTotal;
   };
 
+  // addProduct = () => {
+  //   this.db
+  //     .collection("products")
+  //     .add({
+  //       img: "",
+  //       price: 12000,
+  //       qty: 1,
+  //       title: "Washing Machine",
+  //     })
+  //     .then((docRef) => {
+  //       console.log(docRef);
+  //     })
+  //     .catch((err) => {
+  //       console.log("error", err);
+  //     });
+  // };
+
   render() {
     const { products, loading } = this.state;
     return (
       <div className="App">
         <Navbar count={this.getCartCount()} />
+        {/* <button style={{ padding: 20, fontSize: 20 }} onClick={this.addProduct}>
+          Add a Product
+        </button> */}
+        {this.getCartCount() === 0 && <h1>Your Cart is Empty.</h1>}
         <Cart
           products={products}
           onIncreaseQuantity={this.handleIncreaseQuantity}
@@ -120,9 +177,11 @@ class App extends React.Component {
           onDeleteProduct={this.handleDeleteProduct}
         />
         {loading && <h1>Loading Products...</h1>}
-        <div style={{ padding: 10, fontSize: 20 }}>
-          Your Cart Total is: {this.getCartTotal()}
-        </div>
+        {this.getCartCount() > 0 && (
+          <div style={{ padding: 10, fontSize: 20 }}>
+            Your Cart Total is: Rs {this.getCartTotal()}
+          </div>
+        )}
       </div>
     );
   }
