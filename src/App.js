@@ -36,6 +36,12 @@ class App extends React.Component {
 
     this.db
       .collection("products")
+      //where is used to query over the firebase db
+      // .where('price', '>', 100)
+      // .where('title', '==', 'Mug')
+      // orderBy is used to sort data in firebase db 'asc' is by
+      // default 'desc' can also be used
+      .orderBy("title")
       //onSnapshot is an observer that updates the UI whenever the data
       //in firebase changes
       .onSnapshot((snapshot) => {
@@ -176,7 +182,7 @@ class App extends React.Component {
           onDecreaseQuantity={this.handleDecreaseQuantity}
           onDeleteProduct={this.handleDeleteProduct}
         />
-        {loading && <h1>Loading Products...</h1>}
+        {loading && <h2>Loading Products...</h2>}
         {this.getCartCount() > 0 && (
           <div style={{ padding: 10, fontSize: 20 }}>
             Your Cart Total is: Rs {this.getCartTotal()}
